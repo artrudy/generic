@@ -46,6 +46,17 @@ const player3: PlayerData<string, object> = {
 // С текущими данными в консоль должно попадать:
 // { squares: 3, circles: 2, triangles: 2, others: 1 }
 
+enum FiguresNames {
+  Rect = "rect",
+  Circle = "circle",
+  Triangle = "triangle",
+  Line = "line",
+}
+
+interface IFigure {
+  name: FiguresNames;
+}
+
 interface AmountOfFigures {
   squares: number;
   circles: number;
@@ -53,39 +64,70 @@ interface AmountOfFigures {
   others: number;
 }
 
-function calculateAmountOfFigures(figure): AmountOfFigures {}
+function calculateAmountOfFigures<T extends IFigure>(
+  figure: T[]
+): AmountOfFigures {
+  const amount: AmountOfFigures = {
+    squares: 0,
+    circles: 0,
+    triangles: 0,
+    others: 0,
+  };
 
-const data = [
+  figure.forEach((fig) => {
+    switch (fig.name) {
+      case FiguresNames.Rect:
+        amount.squares += 1;
+        break;
+      case FiguresNames.Triangle:
+        amount.triangles += 1;
+        break;
+      case FiguresNames.Circle:
+        amount.circles += 1;
+        break;
+      default:
+        amount.others += 1;
+    }
+  });
+
+  return amount;
+}
+
+interface ICustomData extends IFigure {
+  data?: {};
+}
+
+const data: ICustomData[] = [
   {
-    name: "rect",
+    name: FiguresNames.Rect,
     data: { a: 5, b: 10 },
   },
   {
-    name: "rect",
+    name: FiguresNames.Rect,
     data: { a: 6, b: 11 },
   },
   {
-    name: "triangle",
+    name: FiguresNames.Triangle,
     data: { a: 5, b: 10, c: 14 },
   },
   {
-    name: "line",
+    name: FiguresNames.Line,
     data: { l: 15 },
   },
   {
-    name: "circle",
+    name: FiguresNames.Circle,
     data: { r: 10 },
   },
   {
-    name: "circle",
+    name: FiguresNames.Circle,
     data: { r: 5 },
   },
   {
-    name: "rect",
+    name: FiguresNames.Rect,
     data: { a: 15, b: 7 },
   },
   {
-    name: "triangle",
+    name: FiguresNames.Triangle,
   },
 ];
 
